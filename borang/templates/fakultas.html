@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Signup Page{% endblock %}
+{% block content %}
+    <div class="col-lg-4">
+      <h1>Signup Page</h1>
+      <form action="#" method="POST">
+        <select name="fakultas" class="custom-select" id="inputGroupSelect01">
+          {% for x in daftar_fakultas: %}
+            <option value="{{x}}">{{x}}</option>
+          {% endfor %}
+        </select>
+        <input type="hidden" name="stage" value="second">
+        <div class="container-fluid">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+{% endblock %}
