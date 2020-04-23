@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Soal Standar{% endblock %}
 {% block content %}
+<h5>{{prodi}}</h5>
 <form action="#" method="POST">
     <div class="container-fluid border">
         <div class="row border">
@@ -11,7 +12,7 @@
             <div class="col-lg-1">1</div>
             <div class="col-lg-1">0</div>
         </div>
-        {% for x in range(14): %}
+        {% for x in range(7): %}
         <div class="row">
             <div class="col-lg-4 col-xs-12">{{kriteria[x]}}</div>
             <div class="col-lg-1 offset-lg-1"><input type="checkbox" name="id_kriteria" value="4"></div>

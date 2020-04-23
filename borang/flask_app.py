@@ -10,20 +10,13 @@ db = SQLAlchemy(app)
 # 80abd1c7b39878f896b4d09b68f08217f9e6d5b321db974dd5d24fc762bcb06f
 
 kriteria = [
-    'Kondisi Eksternal',
-    'Profil Unit Pengelola',
-    'Kriteria',
-    'Tata Pamong, Tata Kelola, dan Kerjasama',
-    'Mahasiswa',
+    'Visi, Misi, Tujuan, dan Sasaran, serta Strategi Pencapaian',
+    'Tata Pamong, Kepemimpinan, Sistem Pengelolaan, dan Penjaminan Mutu',
+    'Mahasiswa dan Lulusan',
     'Sumber Daya Manusia',
-    'Keuangan, Sarana, dan Prasarana',
-    'Pendidikan',
-    'Penelitian',
-    'Luaran dan Capaian Tridharma',
-    'Analisis dan Capaian Kinerja',
-    'Analisis SWOT atau Analisis Lain Yang Relevan',
-    'Program Pengembanga',
-    'Program Keberlanjutan'
+    'Kurikulum, Pembelajaran, dan Suasana Akademik',
+    'Pembiayaan, Sarana dan Prasarana, serta Sistem Informasi',
+    'Penelitian, Pelayanan/Pengabdian Kepada Masyarakat, dan Kerjasama'
 ]
 
 daftar_prodi = [
@@ -94,6 +87,16 @@ daftar_fakultas = [
     'Fakultas Ilmu Terapan'
 ]
 
+presentasi = [
+    2.62,
+    26.32,
+    13.16,
+    18.42,
+    7.89,
+    18.42,
+    13.16
+]
+
 id_kriteria = [f"krit{x}" for x in range(14)]
 
 
@@ -123,16 +126,30 @@ class User(db.Model):
 
 class Borang(db.Model):
     id_borang = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    isi = db.Column(db.String(28))
-    username_kaprodi = db.Column(db.String(50), nullable=False)
-    prodinya = db.Column(db.String(30), nullable=False)
+    isi = db.Column(db.String(14))
+    username_kaprodi = db.Column(db.String(50), nullable=True)
+    prodinya = db.Column(db.String(30), nullable=True)
 
-    def __init__(self, isi, username_kaprodi):
+    def __init__(self, isi, username_kaprodi, prodinya):
         self.isi = isi
         self.username_kaprodi = username_kaprodi
+        self.prodinya = prodinya
 
     def __str__(self):
         return self.username_kaprodi
+
+
+class Skor(db.Model):
+    id_skor = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    prodinya = db.Column(db.String(30), nullable=True)
+    skor = db.Column(db.Integer)
+
+    def __init__(self, prodinya, skor):
+        self.prodinya = prodinya
+        self.skor = skor
+
+    def __str__(self):
+        return self.prodinya
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -233,20 +250,27 @@ def soal():
     if request.method == "GET":
         if "username" in session:
             username = session["username"]
-            return render_template("soal.html", username=username, kriteria=kriteria, id_kriteria=id_kriteria)
+            prodi = session["prodi"]
+            return render_template("soal.html", username=username, kriteria=kriteria, id_kriteria=id_kriteria, prodi=prodi)
         else:
             session["status"] = "inactive"
             flash("Please login first")
             return redirect(url_for("login"))
     else:
         username_kaprodi = session["username"]
+        prodi = session["prodi"]
         nilai = request.form.getlist('id_kriteria')
-        if len(nilai) != 14:
+        if len(nilai) != 7:
             flash("Penilaian belum lengkap, silahkan isi kembali")
             return redirect(url_for("soal"))
         else:
             save = ','.join(nilai)
-            borang = Borang(save, username_kaprodi)
+            borang = Borang(save, username_kaprodi, prodi)
+            skor = 0.0
+            for x in range(7):
+                skor += (float(nilai[x]) * presentasi[x])
+            hasil = Skor(prodi, skor)
+            db.session.add(hasil)
             db.session.add(borang)
             db.session.commit()
             flash("Penilaian telah tersimpan")
@@ -298,6 +322,42 @@ def prodi():
         db.session.add(new_user)
         db.session.commit()
         flash("Signup success")
+        return redirect(url_for("login"))
+
+
+@app.route("/akreditasi")
+def akreditasi():
+    if "status" in session:
+        if session["status"] == "active":
+            username = session["username"]
+            skor = Skor.query.all()
+            length = len(skor)
+            return render_template("akreditasi.html", skor=skor, length=length, username=username)
+        else:
+            flash("You are not logged in yet")
+            return redirect(url_for("login"))
+    else:
+        session["status"] = "inactive"
+        flash("You are not logged in yet")
+        return redirect(url_for("login"))
+
+
+@app.route("/akun")
+def akun():
+    if "status" in session:
+        if session["status"] == "active":
+            username = session["username"]
+            found_user = User.query.filter_by(username=username).first()
+            email = found_user.email
+            level = found_user.level
+            prodi = found_user.prodi
+            return render_template("akun.html", username=username, email=email, level=level, prodi=prodi)
+        else:
+            flash("You are not logged in yet")
+            return redirect(url_for("login"))
+    else:
+        session["status"] = "inactive"
+        flash("You are not logged in yet")
         return redirect(url_for("login"))
 
 

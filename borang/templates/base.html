@@ -25,16 +25,23 @@
       <div class="list-group list-group-flush">
         <a href="/" class="list-group-item list-group-item-action bg-light">Home</a>
         <a href="/akun" class="list-group-item list-group-item-action bg-light">Akun</a>
-        <div class="dropdown">
-          <button class="btn list-group-item list-group-item-action bg-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Menu
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/soal">Soal Standar</a>
-            <a class="dropdown-item" href="/penilaian">Elemen Penilaian</a>
-          </div>
-        </div>
-        <a href="/hasil" class="list-group-item list-group-item-action bg-light">Hasil Nilai</a>
+        {% if session["level"]=="Kaprodi": %}
+            <a href="/soal" class="list-group-item list-group-item-action bg-light">Soal Standar</a>
+        {% elif session["level"]=="Tim Akreditasi": %}
+            <a href="/penilaian" class="list-group-item list-group-item-action bg-light">Penilaian</a>
+        {% else: %}
+            <a href="/akreditasi" class="list-group-item list-group-item-action bg-light">Hasil Akreditasi</a>
+        {% endif %}
+<!--        <div class="dropdown">-->
+<!--          <button class="btn list-group-item list-group-item-action bg-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--            Menu-->
+<!--          </button>-->
+<!--          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+<!--            <a class="dropdown-item" href="/soal">Soal Standar</a>-->
+<!--            <a class="dropdown-item" href="/penilaian">Elemen Penilaian</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <a href="/hasil" class="list-group-item list-group-item-action bg-light">Hasil Nilai</a>-->
       </div>
     </div>
     <!-- /#sidebar-wrapper -->

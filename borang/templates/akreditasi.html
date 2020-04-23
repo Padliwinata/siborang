@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Akreditasi{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-lg-6 col-xs-12 table table-bordered">
+        <table class="table table-stripped">
+            <tr class="thead-light">
+                <th>#</th>
+                <th>Prodi</th>
+                <th>Skor</th>
+            </tr>
+            {% for x in range(length): %}
+            <tr>
+                <td>{{x+1}}</td>
+                <td>{{skor[x].prodinya}}</td>
+                <td>{{skor[x].skor}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

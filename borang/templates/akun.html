@@ -1,5 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Profil {{username}}{% endblock %}
 {% block content %}
-
+<div class="container-fluid">
+    <div class="col-lg-6 col-xs-12 table table-bordered">
+        <table class="table table-stripped">
+            <tr>
+                <td>Email</td>
+                <td>{{email}}</td>
+            </tr>
+            <tr>
+                <td>Username</td>
+                <td>{{username}}</td>
+            </tr>
+            <tr>
+                <td>Level</td>
+                <td>{{level}}</td>
+            </tr>
+            {% if prodi: %}
+            <tr>
+                <td>Prodi</td>
+                <td>{{prodi}}</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
 {% endblock %}
