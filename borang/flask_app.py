@@ -87,6 +87,8 @@ daftar_fakultas = [
     'Fakultas Ilmu Terapan'
 ]
 
+length = len(daftar_fakultas)
+
 presentasi = [
     2.62,
     26.32,
@@ -171,10 +173,12 @@ def login():
             if found_user.password == password:
                 email = found_user.email
                 level = found_user.level
+                prodi_login = found_user.prodi
                 session["username"] = username
                 session["email"] = email
                 session["level"] = level
                 session["status"] = "active"
+                session["prodi"] = prodi_login
                 flash("Login success")
                 return redirect(url_for("home"))
             else:
@@ -209,6 +213,7 @@ def logout():
     session.pop("email")
     session.pop("level")
     session.pop("status")
+    session.pop("prodi")
     flash("Logout success")
     return redirect(url_for("login"))
 
@@ -221,24 +226,16 @@ def signup():
             return redirect(url_for("home"))
         else:
             session["status"] = "inactive"
-            return render_template("signup.html")
+            return render_template("signup.html", daftar_fakultas=daftar_fakultas, daftar_prodi=daftar_prodi
+                                   , length=length)
     else:
-        if request.form["stage"] == "first":
-            level = request.form["level"]
-            email = request.form["email"]
-            password = encrypt_string(request.form["password"])
-            username = request.form["username"]
-            session["email"] = email
-            session["password"] = password
-            session["username"] = username
-            session["level"] = level
-            if level == "Kaprodi":
-                return redirect(url_for("fakultas"))
-        email = session["email"]
-        username = session["username"]
-        password = session["password"]
-        level = session["level"]
-        new_user = User(email, username, password, level, '')
+        email = request.form["email"]
+        username = request.form["username"]
+        password = encrypt_string(request.form["password"])
+        level = request.form["level"]
+        prodi_sgnp = request.form["prodi"]
+        session["email"] = email
+        new_user = User(email, username, password, level, prodi_sgnp)
         db.session.add(new_user)
         db.session.commit()
         flash("Signup success")
@@ -250,8 +247,8 @@ def soal():
     if request.method == "GET":
         if "username" in session:
             username = session["username"]
-            prodi = session["prodi"]
-            return render_template("soal.html", username=username, kriteria=kriteria, id_kriteria=id_kriteria, prodi=prodi)
+            prodi_soal = session["prodi"]
+            return render_template("soal.html", username=username, kriteria=kriteria, id_kriteria=id_kriteria, prodi=prodi_soal)
         else:
             session["status"] = "inactive"
             flash("Please login first")
@@ -275,54 +272,6 @@ def soal():
             db.session.commit()
             flash("Penilaian telah tersimpan")
             return redirect(url_for("soal"))
-
-
-@app.route("/fakultas", methods=["POST", "GET"])
-def fakultas():
-    if request.method == "GET":
-        if "username" in session:
-            username = session["username"]
-            if User.query.filter_by(username=username).first():
-                flash("You are not allowed to access this page")
-                return redirect(url_for("home"))
-            else:
-                return render_template("fakultas.html", daftar_fakultas=daftar_fakultas)
-        else:
-            flash("You are not allowed to access this page")
-            return redirect(url_for("home"))
-    else:
-        fakultas_form = request.form["fakultas"]
-        session["fakultas"] = fakultas_form
-        return redirect(url_for("prodi"))
-
-
-@app.route("/prodi", methods=["POST", "GET"])
-def prodi():
-    if request.method == "GET":
-        if "username" in session:
-            username = session["username"]
-            if User.query.filter_by(username=username).first():
-                flash("You are not allowed to access this page")
-                return redirect(url_for("home"))
-            else:
-                fakultas = session["fakultas"]
-                urutan = [x for x, y in enumerate(daftar_fakultas) if y == fakultas][0]
-                return render_template("prodi.html", daftar_prodi=daftar_prodi[urutan])
-        else:
-            flash("You are not allowed to access this page")
-            return redirect(url_for("home"))
-    else:
-        prodi_form = request.form["prodi"]
-        session["prodi"] = prodi_form
-        email = session["email"]
-        username = session["username"]
-        password = session["password"]
-        level = session["level"]
-        new_user = User(email, username, password, level, prodi_form)
-        db.session.add(new_user)
-        db.session.commit()
-        flash("Signup success")
-        return redirect(url_for("login"))
 
 
 @app.route("/akreditasi")

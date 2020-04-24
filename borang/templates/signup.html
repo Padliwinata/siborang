@@ -1,40 +1,162 @@
-{% extends "base.html" %}
-{% block title %}Signup Page{% endblock %}
-{% block content %}
-<div class="col-lg-4 col-sm-12">
-  <h1>Signup</h1>
-  <form action="#" method="POST">
-    <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/simple-sidebar.css') }}">
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    <meta charset="UTF-8">
+    <script>
+      $("#fakultas").hide();
+    </script>
+    <title id="title">Signup Page</title>
+</head>
+<body>
+<!-- THIS IS FOR THE NAVIGATION BAR -->
+
+<!-- THIS IS THE END OF THE NAVIGATION BAR -->
+
+
+
+    <div class="d-flex" id="wrapper">
+    {% if username: %}
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Hello, {{username}}</div>
+      <div class="list-group list-group-flush">
+        <a href="/" class="list-group-item list-group-item-action bg-light">Home</a>
+        <a href="/akun" class="list-group-item list-group-item-action bg-light">Akun</a>
+        {% if session["level"]=="Kaprodi": %}
+            <a href="/soal" class="list-group-item list-group-item-action bg-light">Soal Standar</a>
+        {% elif session["level"]=="Tim Akreditasi": %}
+            <a href="/penilaian" class="list-group-item list-group-item-action bg-light">Penilaian</a>
+        {% else: %}
+            <a href="/akreditasi" class="list-group-item list-group-item-action bg-light">Hasil Akreditasi</a>
+        {% endif %}
+<!--        <div class="dropdown">-->
+<!--          <button class="btn list-group-item list-group-item-action bg-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--            Menu-->
+<!--          </button>-->
+<!--          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+<!--            <a class="dropdown-item" href="/soal">Soal Standar</a>-->
+<!--            <a class="dropdown-item" href="/penilaian">Elemen Penilaian</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <a href="/hasil" class="list-group-item list-group-item-action bg-light">Hasil Nilai</a>-->
+      </div>
     </div>
-    <div class="form-group">
-      <label>Username</label>
-      <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username">
+    <!-- /#sidebar-wrapper -->
+    {% endif %}
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+          {% if username: %}
+            <button class="btn btn-primary" id="menu-toggle" >Menu</button>
+          {% endif %}
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="rounded collapse navbar-collapse bg-dark" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            {% if username: %}
+              <li class="nav-item active">
+                <a style="color:white" class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+        {% with messages = get_flashed_messages() %}
+          {% if messages: %}
+            {% for x in messages: %}
+              <div class="alert alert-warning" role="alert">{{x}}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="container-fluid">
+            <div class="col-lg-6 col-sm-12">
+                <h1>Signup</h1>
+                <form action="#" method="POST">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                  </div>
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                  </div>
+                  <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text">Options</label>
+                  </div>
+                  <select name="level" id="level" class="custom-select">
+                    <option value="Rektor">Rektor</option>
+                    <option value="Kaprodi">Kaprodi</option>
+                    <option value="Tim Akreditasi">Tim Akreditasi</option>
+                  </select>
+                  <select style="display:none" id="fakultas" name="fakultas" class="custom-select">
+                    {% for x in range(length): %}
+                      <option value="{{x}}">{{daftar_fakultas[x]}}</option>
+                    {% endfor %}
+                  </select>
+                  {% for x in range(length): %}
+                    <select style="display:none" id="{{x}}" name="anything" class="custom-select">
+                      {% for y in daftar_prodi[x]: %}
+                        <option value="{{y}}">{{y}}</option>
+                      {% endfor %}
+                    </select>
+                  {% endfor %}
+                  </div>
+                    <input id="prodi" type="hidden" name="prodi" value="something">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <a href="javascript:history.back()" class="btn btn-secondary btn-md active" role="button">Cancel</a>
+                </form>
+              </div>
+        </div>
     </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-    </div>
-    <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <label class="input-group-text" for="inputGroupSelect01">Options</label>
-    </div>
-    <select name="level" class="custom-select" id="inputGroupSelect01">
-      <option value="Rektor">Rektor</option>
-      <option value="Tim Akreditasi">Tim Akreditasi</option>
-      <option id="kaprodi" value="Kaprodi">Kaprodi</option>
-    </select>
-<!--    <select id="prodi" name="prodi" class="custom-select">-->
-<!--      <option value="Rektor">Rektor</option>-->
-<!--      <option value="Tim Akreditasi">Tim Akreditasi</option>-->
-<!--      <option value="Kaprodi">Kaprodi</option>-->
-<!--    </select>-->
-    </div>
-    <input type="hidden" name="stage" value="first">
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <a href="javascript:history.back()" class="btn btn-secondary btn-md active" role="button">Cancel</a>
-  </form>
-</div>
-{% endblock %}
+    <!-- /#page-content-wrapper -->
+
+  </div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+var fak = $("#fakultas").val();
+var last = $("#fakultas").val();
+var a = ""
+  $("#level").change(function(){
+    if ($("#level").val() != "Kaprodi"){
+      $("#fakultas").hide();
+      $("#"+last).hide();
+    }else{
+      $("#fakultas").show();
+    }
+  });
+
+  $("#fakultas").change(function(){
+    $("#"+last).hide()
+    fak = $("#fakultas").val()
+    $("#"+fak).show()
+    last = fak
+  });
+
+  $("#fakultas").change(function(){
+    $("#"+fak).change(function(){
+        a = $("#"+fak+" option:selected").val();
+        $("#prodi").val(a);
+    });
+  });
+
+  $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+</script>
+</body>
+</html>
