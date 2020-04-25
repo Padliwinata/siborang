@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/simple-sidebar.css">
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    <meta charset="UTF-8">
+    <script>
+      $("#fakultas").hide();
+    </script>
+    <title id="title">Signup Page</title>
+</head>
+<body>
+<!-- THIS IS FOR THE NAVIGATION BAR -->
+
+<!-- THIS IS THE END OF THE NAVIGATION BAR -->
+
+
+
+    <div class="d-flex" id="wrapper">
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="rounded collapse navbar-collapse bg-dark" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+          </ul>
+        </div>
+      </nav>
+        <div class="container-fluid">
+            <div class="col-lg-6 col-sm-12">
+                <h1>Signup</h1>
+                <form action="#" method="POST">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                  </div>
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                  </div>
+                  <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text">Options</label>
+                  </div>
+                  <select name="level" id="level" class="custom-select">
+                    <option value="Rektor">Rektor</option>
+                    <option value="Kaprodi">Kaprodi</option>
+                    <option value="Tim Akreditasi">Tim Akreditasi</option>
+                  </select>
+                  <select style="display:none" id="fakultas" name="fakultas" class="custom-select">
+                    <option value="0">Fakultas Teknik Elektro</option>
+                    <option value="1">Fakultas Teknik Informatika</option>
+                    <option value="2">Fakultas Rekayasa Industri</option>
+                    <option value="3">Fakultas Ekonomi dan Bisnis</option>
+                    <option value="4">Fakultas Komunikasi dan Bisnis</option>
+                    <option value="5">Fakultas Industri Kreatif</option>
+                    <option value="6">Fakultas Ilmu Terapan</option>
+                  </select>
+                  <select style="display:none" name="" id="0">
+                    <option value="S1 Teknik Telekomunikasi">S1 Teknik Telekomunikasi</option>
+                    <option value="S1 Teknik Telekomunikasi (Internasional)">S1 Teknik Telekomunikasi (Internasional)</option>
+                    <option value="S1 Teknik Elektro">S1 Teknik Elektro</option>
+                    <option value="S1 Teknik Elektro (Internasional)">S1 Teknik Elektro (Internasional)</option>
+                    <option value="S1 Teknik Fisika">S1 Teknik Fisika</option>
+                    <option value="S1 Teknik Komputer">S1 Teknik Komputer</option>
+                    <option value="S2 Teknik Elektro-Telekomunikasi">S2 Teknik Elektro-Telekomunikasi</option>
+                  </select>
+                  <select style="display:none" name="" id="1">
+                    <option value="S1 Informatika">S1 Informatika</option>
+                    <option value="S1 Informatika (Internasional)">S1 Informatika (Internasional)</option>
+                    <option value="S1 Teknologi Informasi">S1 Teknologi Informasi</option>
+                    <option value="S1 Rekayasa Perangkat Lunak">S1 Rekayasa Perangkat Lunak</option>
+                    <option value="S2 Informatika">S2 Informatika</option>
+                  </select>
+                  <select style="display:none" name="" id="2">
+                    <option value="S1 Teknik Industri">S1 Teknik Industri</option>
+                    <option value="S1 Teknik Industri">S1 Teknik Industri (Internasional)</option>
+                    <option value="S1 Sistem Informasi">S1 Sistem Informasi</option>
+                    <option value="S1 Sistem Informasi">S1 Sistem Informasi (Internasional)</option>
+                    <option value="S1 Teknik Logistik">S1 Teknik Logistik</option>
+                    <option value="S2 Teknik Industri">S2 Teknik Industri</option>
+                  </select>
+                  <select style="display:none" name="" id="3">
+                    <option value="S1 International ICT Business">S1 International ICT Business</option>
+                    <option value="S1 Manajemen Bisnis Telekomunikasi & Informatika (MBTI)">S1 Manajemen Bisnis Telekomunikasi & Informatika (MBTI)</option>
+                    <option value="S1 Akuntansi">S1 Akuntansi</option>
+                    <option value="S1 Manajemen">S1 Manajemen</option>
+                  </select>
+                  <select style="display:none" name="" id="4">
+                    <option value="S1 Administrasi Bisnis">S1 Administrasi Bisnis</option>
+                    <option value="S1 Administrasi Bisnis (Internasional)">S1 Administrasi Bisnis (Internasional)</option>
+                    <option value="S1 Ilmu Komunikasi">S1 Ilmu Komunikasi</option>
+                    <option value="S1 Ilmu Komunikasi (Internasional)">S1 Ilmu Komunikasi (Internasional)</option>
+                    <option value="S1 Digital Public Relation">S1 Digital Public Relation</option>
+                  </select>
+                  <select style="display:none" name="" id="5">
+                    <option value="S1 Desain Komunikasi Visual">S1 Desain Komunikasi Visual</option>
+                    <option value="S1 Desain Komunikasi Visual (Internasional">S1 Desain Komunikasi Visual (Internasional)</option>
+                    <option value="S1 Product Innovation & Management">S1 Product Innovation & Management</option>
+                    <option value="S1 Desain Interior">S1 Desain Interior</option>
+                    <option value="S1 Kriya (Fashion and Textile ">S1 Kriya (Fashion and Textile Design)</option>
+                    <option value="S1 Visual Arts (Seni Rupa">S1 Visual Arts (Seni Rupa)</option>
+                    <option value="S2 Desain ">S2 Desain</option>
+                  </select>
+                  <select style="display:none" name="" id="6">
+                    <option value="D3 Teknologi Telekomunikasi">D3 Teknologi Telekomunikasi</option>
+                    <option value="D3 Teknik Informatika">D3 Teknik Informatika</option>
+                    <option value="D3 Sistem Informasi">D3 Sistem Informasi</option>
+                    <option value="D3 Sistem Informasi Akuntansi">D3 Sistem Informasi Akuntansi</option>
+                    <option value="D3 Teknologi Komputer">D3 Teknologi Komputer</option>
+                    <option value="D3 Digital Marketing">D3 Digital Marketing</option>
+                    <option value="D3 Perhotelan">D3 Perhotelan</option>
+                  </select>
+                  </div>
+                    <input id="prodi" type="hidden" name="prodi" value="something">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <a href="login.html" class="btn btn-secondary btn-md active" role="button">Cancel</a>
+                </form>
+              </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+var fak = $("#fakultas").val();
+var last = $("#fakultas").val();
+var a = ""
+  $("#level").change(function(){
+    if ($("#level").val() == "Rektor"){
+      $("#fakultas").hide();
+      $("#"+last).hide();
+    }else{
+      $("#fakultas").show();
+    }
+  });
+
+  $("#fakultas").change(function(){
+    $("#"+last).hide()
+    fak = $("#fakultas").val()
+    $("#"+fak).show()
+    last = fak
+  });
+
+  $("#fakultas").change(function(){
+    $("#"+fak).change(function(){
+        a = $("#"+fak+" option:selected").val();
+        $("#prodi").val(a);
+    });
+  });
+
+  $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+</script>
+</body>
+</html>
