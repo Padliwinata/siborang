@@ -131,7 +131,7 @@ var fak = $("#fakultas").val();
 var last = $("#fakultas").val();
 var a = ""
   $("#level").change(function(){
-    if ($("#level").val() != "Kaprodi"){
+    if ($("#level").val() == "Rektor"){
       $("#fakultas").hide();
       $("#"+last).hide();
     }else{

@@ -234,12 +234,21 @@ def signup():
         password = encrypt_string(request.form["password"])
         level = request.form["level"]
         prodi_sgnp = request.form["prodi"]
-        session["email"] = email
-        new_user = User(email, username, password, level, prodi_sgnp)
-        db.session.add(new_user)
-        db.session.commit()
-        flash("Signup success")
-        return redirect(url_for("login"))
+        found_user = User.query.filter_by(username=username).first()
+        if found_user:
+            flash("Username telah terpakai. Mohon gunakan username lain")
+            return redirect(url_for("signup"))
+        else:
+            if level == "Kaprodi":
+                found_user = User.query.filter_by(level="Kaprodi", prodi=prodi_sgnp).first()
+                if found_user:
+                    flash("Sudah ada kaprodi terdaftar untuk prodi ini")
+                    return redirect(url_for("signup"))
+            new_user = User(email, username, password, level, prodi_sgnp)
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Signup success")
+            return redirect(url_for("login"))
 
 
 @app.route("/soal", methods=["POST", "GET"])
@@ -261,13 +270,19 @@ def soal():
             flash("Penilaian belum lengkap, silahkan isi kembali")
             return redirect(url_for("soal"))
         else:
-            save = ','.join(nilai)
-            borang = Borang(save, username_kaprodi, prodi)
             skor = 0.0
             for x in range(7):
                 skor += (float(nilai[x]) * presentasi[x])
-            hasil = Skor(prodi, skor)
-            db.session.add(hasil)
+            found_skor = Skor.query.filter_by(prodinya=prodi).first()
+            if found_skor:
+                found_nilai = found_skor.skor
+                skor = (skor+found_nilai)/2
+                found_skor.skor = round(skor, 2)
+            else:
+                hasil = Skor(prodi, skor)
+                db.session.add(hasil)
+            save = ','.join(nilai)
+            borang = Borang(save, username_kaprodi, prodi)
             db.session.add(borang)
             db.session.commit()
             flash("Penilaian telah tersimpan")
